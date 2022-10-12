@@ -1,0 +1,25 @@
+from datetime import datetime
+from airflow import DAG
+from airflow.sensors.date_time import DateTimeSensorAsync
+
+for k in range(10):
+    dag_id = f"async_dag_{k}"
+
+    with DAG(
+        dag_id,
+        start_date=datetime(2021, 12, 22, 20, 0),
+        end_date=datetime(2022, 12, 22, 20, 59),
+        schedule_interval="* * * * *",
+        catchup=False,
+        tags=["async"],
+        max_active_runs=1000,
+        max_active_tasks=1000,
+    ) as dag:
+
+        async_sensor = DateTimeSensorAsync(
+            task_id="async_task",
+            target_time="""{{ macros.datetime.utcnow() + macros.timedelta(minutes=1) }}""",
+            pool="async",
+        )
+
+        globals()[dag_id] = dag
