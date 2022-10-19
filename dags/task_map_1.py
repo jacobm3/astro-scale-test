@@ -4,7 +4,7 @@ from datetime import datetime
 import time
 from airflow.models import Variable
 
-with DAG('task_map_1', start_date=datetime(2022, 1, 1), schedule='*/30 * * * *', catchup=False,
+with DAG('task_map_1', start_date=datetime(2022, 1, 1), schedule='*/5 * * * *', catchup=False,
           max_active_runs=2000, max_active_tasks=2000) as dag:
 
     @task
